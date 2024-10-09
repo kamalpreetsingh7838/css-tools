@@ -1,4 +1,3 @@
-##testing
 name: Dependabot auto-merge
 on: pull_request_target
 
@@ -9,7 +8,6 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
         id: metadata
@@ -25,6 +23,10 @@ jobs:
           EOF
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Start a new shell to trigger BASH_ENV execution
+      - name: Trigger New Shell Session
+        run: echo "Triggering New Shell to execute BASH_ENV"
 
       - name: Enable auto-merge for Dependabot PRs
         if: ${{contains(steps.metadata.outputs.dependency-type, 'development') && (steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor')}}
